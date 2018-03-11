@@ -1,7 +1,11 @@
 package com.google.training.helloworld;
 
+/**
+ * Simple POJO class that generates a greeting
+ */
 public class HelloClass {
-    public String message = "Hello World";
+
+    private String message = "Hello World";
 
     public HelloClass () {
     }
