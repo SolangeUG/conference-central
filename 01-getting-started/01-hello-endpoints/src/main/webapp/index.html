@@ -10,6 +10,8 @@
         <!-- A little bit of styling -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
               integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <!-- Link to our own CSS file-->
+        <link rel="stylesheet" href="/styles.css">
         <script src="hello.js"></script>
 
         <!--  Load the Google APIs Javascript client library to be able to use Endpoints in our front-end -->
@@ -22,21 +24,44 @@
             <h2>My First Endpoints App</h2>
             <section>
                 <input id="input_greet_generically" type="button"
-                       value="please wait" class="btn btn-primary"
+                       value="please wait" class="btn btn-secondary"
                        onclick="will_be_set_after_endpoints_apis_loaded">
-                <!--</input>-->
             </section>
 
-            <section class="form-group">
-                <label for="name_field">What is your name?</label>
-                <input value ="Zebra" id="name_field" class="form-control">
-            </section>
-
-            <section>
+            <section class="form">
+                <div class="form-group row">
+                    <label for="name_field" class="col-sm-2 col-form-label">What is your name?</label>
+                    <div class="col-sm-4">
+                        <input value ="Zebra" id="name_field" class="form-control">
+                    </div>
+                </div>
                 <input id="input_greet_by_name" type="button"
-                       value="please wait" class="btn btn-primary"
+                       value="please wait" class="btn btn-secondary form-control col-sm-3"
                        onclick="will_be_set_after_endpoints_apis_loaded">
-                <!--</input>-->
+            </section>
+
+            <!--<section>-->
+                <!--<input id="input_greet_by_name" type="button"-->
+                       <!--value="please wait" class="btn btn-primary"-->
+                       <!--onclick="will_be_set_after_endpoints_apis_loaded">-->
+            <!--</section>-->
+
+            <section class="form">
+                <div class="form-group row">
+                    <label for="new_name_field" class="col-sm-2 col-form-label">What is your name?</label>
+                    <div class="col-sm-4">
+                        <input value="Scully" id="new_name_field" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="period_field" class="col-sm-2 col-form-label">Give a period</label>
+                    <div class="col-sm-4">
+                        <input value="afternoon" id="period_field" class="form-control">
+                    </div>
+                </div>
+                <input id="input_greet_by_period" type="button"
+                       value="please wait" class="btn btn-secondary form-control col-sm-4"
+                       onclick="will_be_set_after_endpoints_apis_loaded">
             </section>
         </main>
 
