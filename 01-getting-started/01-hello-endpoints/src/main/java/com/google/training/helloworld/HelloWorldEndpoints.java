@@ -21,8 +21,9 @@ public class HelloWorldEndpoints {
      * Return a generic greeting to the world
      * @return generic greeting
      */
-    @ApiMethod(name = "sayHello", path = "sayHello",
-            httpMethod = HttpMethod.GET)
+    @ApiMethod(name = "sayHello",
+                path = "sayHello",
+                httpMethod = HttpMethod.GET)
     public HelloClass sayHello() {
         // The @ApiMethod notation declares this method as
         // a method availale externally through Endpoints.
@@ -36,13 +37,27 @@ public class HelloWorldEndpoints {
      * @param name the name of the caller
      * @return specific greeting
      */
-    @ApiMethod(name = "sayHelloByName", path = "sayHelloByName",
-            httpMethod = HttpMethod.GET)
-    public HelloClass sayHelloByName (@Named("name") String name) {
+    @ApiMethod(name = "sayHelloByName",
+                path = "sayHelloByName",
+                httpMethod = HttpMethod.GET)
+    public HelloClass sayHelloByName(@Named("name") String name) {
         // The @ApiMethod notation declares this method as
         // a method availale externally through Endpoints.
         // And, although this method only outputs a simple greeting,
         // it can't return a String object, and thus the use of the HelloClass!
         return new HelloClass(name);
+    }
+
+    /**
+     * Return a specific greeting including the period of day to the caller
+     * @param name the caller name
+     * @param period the time of day
+     * @return a specific greeting
+     */
+    @ApiMethod(name = "greetByPeriod",
+                path= "greetByPeriod",
+                httpMethod = HttpMethod.GET)
+    public HelloClass greetByPeriod(@Named("name") String name, @Named("period") String period) {
+        return new HelloClass(name, period);
     }
 }
