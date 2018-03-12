@@ -95,10 +95,10 @@ public class ConferenceApi {
             throw new UnauthorizedException("Authorization required");
         }
 
-        // TODO load the Profile Entity by initializing these variables
-        String userId = ""; // TODO
-        Key key = null; // TODO
-        Profile profile = null; // TODO load the Profile entity
+        // TODO 3 (In Lesson 3) Load the Profile Entity by initializing these variables
+        String userId = ""; // TODO 3 (In Lesson 3)
+        Key key = null; // TODO 3 (In Lesson 3)
+        Profile profile = null; // TODO 3 (In Lesson 3) Load the Profile entity
         return profile;
     }
 }
