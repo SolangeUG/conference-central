@@ -67,6 +67,20 @@ public class Profile {
 	}
 
 	/**
+	 * Update this profile's properties
+	 * @param displayName the new display name value
+	 * @param teeShirtSize the new tee shirt size value
+	 */
+	public void update(String displayName, TeeShirtSize teeShirtSize) {
+		if (displayName != null) {
+			this.displayName = displayName;
+		}
+		if (teeShirtSize != null) {
+			this.teeShirtSize = teeShirtSize;
+		}
+	}
+
+	/**
      * A private default constructor.
      */
     private Profile() {}

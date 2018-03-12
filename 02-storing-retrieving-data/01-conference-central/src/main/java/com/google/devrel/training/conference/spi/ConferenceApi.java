@@ -57,27 +57,33 @@ public class ConferenceApi {
 			throw new UnauthorizedException("Authorization required");
 		}
 
-		TeeShirtSize teeShirtSize = TeeShirtSize.NOT_SPECIFIED;
+		// Check for an existing profile
+		Profile profile = getProfile(user);
 
+		TeeShirtSize teeShirtSize = TeeShirtSize.NOT_SPECIFIED;
 		// COMPLETED 1 Set the teeShirtSize to the value sent by the ProfileForm if sent, otherwise leave it as is
 		if (profileForm.getTeeShirtSize() != null) {
 			teeShirtSize = profileForm.getTeeShirtSize();
 		}
 
-		// COMPLETED 2 Get the userId and mainEmail
-		String userId = user.getUserId();
-		String mainEmail = user.getEmail();
-
 		// COMPLETED 1 Set the displayName to the value sent by the ProfileForm if sent, otherwise set it to null
 		String displayName = profileForm.getDisplayName();
 
-		// COMPLETED 2 If the displayName is null, set it to default value based on the user's email
-		if (displayName == null) {
-			displayName = extractDefaultDisplayNameFromEmail(mainEmail);
-		}
+		if (profile != null) {
+			// if it exists, update its properties
+			profile.update(displayName, teeShirtSize);
+		} else {
+			// COMPLETED 2 Get the userId and mainEmail
+			String userId = user.getUserId();
+			String mainEmail = user.getEmail();
 
-		// Create a new Profile entity from the userId, displayName, mainEmail and teeShirtSize
-		Profile profile = new Profile(userId, displayName, mainEmail, teeShirtSize);
+			// COMPLETED 2 If the displayName is null, set it to default value based on the user's email
+			if (displayName == null) {
+				displayName = extractDefaultDisplayNameFromEmail(mainEmail);
+			}
+			// if not, create a new Profile entity from the userId, displayName, mainEmail and teeShirtSize
+			profile = new Profile(userId, displayName, mainEmail, teeShirtSize);
+		}
 
 		// COMPLETED 3 (In Lesson 3) Save the Profile entity in the datastore
 		ofy().save().entities(profile).now();
