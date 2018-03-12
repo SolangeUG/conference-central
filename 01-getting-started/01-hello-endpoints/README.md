@@ -8,7 +8,7 @@ A skeleton application for Google Cloud Endpoints in Java.
 - [Google App Engine Maven plugin][4]
 
 
-# Setup instructions
+## Setup instructions
 
 1. Update the value of `application` in `appengine-web.xml` to the app ID you have registered in the App Engine admin console
    and would like to use to host your instance of this sample.

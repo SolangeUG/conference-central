@@ -2,14 +2,14 @@
 
 First steps in building a Conference Central App which lets users schedule and query for conferences.
 
-# Products - Language - APIs
+## Products - Language - APIs
 
 - [App Engine][1]
 - [Java][2]
 - [Google Cloud Endpoints][3]
 - [Google App Engine Maven plugin][6]
 
-# Setup instructions
+## Setup instructions
 
 - Update the value of `application` in `appengine-web.xml` to the app ID you have registered in the App Engine admin console and would like to use to host your instance of this sample.
   Note that application ID and version are not necessary when using the Google Cloud SDK to deploy your application. They are generated automatically.
