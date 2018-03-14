@@ -9,11 +9,10 @@ import com.googlecode.objectify.ObjectifyService;
  * Custom Objectify Service that this application should use.
  */
 public class OfyService {
-    /**
+    /*
      * This static block ensure the entity registration.
      */
     static {
-        // factory().register(Conference.class);
         factory().register(Profile.class);
     }
 
@@ -30,7 +29,7 @@ public class OfyService {
      * Use this static method for getting the Objectify service factory.
      * @return ObjectifyFactory.
      */
-    public static ObjectifyFactory factory() {
+    private static ObjectifyFactory factory() {
         return ObjectifyService.factory();
     }
 }
