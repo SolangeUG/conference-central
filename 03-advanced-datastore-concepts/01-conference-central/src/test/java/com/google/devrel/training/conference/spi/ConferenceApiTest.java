@@ -30,25 +30,16 @@ import java.util.List;
 public class ConferenceApiTest {
 
     private static final String EMAIL = "example@gmail.com";
-
     private static final String USER_ID = "123456789";
-
     private static final TeeShirtSize TEE_SHIRT_SIZE = TeeShirtSize.NOT_SPECIFIED;
-
     private static final String DISPLAY_NAME = "Your Name Here";
-
     private static final String NAME = "GCP Live";
-
     private static final String DESCRIPTION = "New announcements for Google Cloud Platform";
-
     private static final String CITY = "San Francisco";
-
     private static final int MONTH = 3;
-
     private static final int CAP = 500;
 
     private User user;
-
     private ConferenceApi conferenceApi;
 
     private final LocalServiceTestHelper helper =
