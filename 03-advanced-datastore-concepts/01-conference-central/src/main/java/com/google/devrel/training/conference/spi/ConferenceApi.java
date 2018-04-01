@@ -153,28 +153,28 @@ public class ConferenceApi {
             throw new UnauthorizedException("Authorization required");
         }
 
-        // TODO (Lesson 4) Get the userId of the logged in User
+        // COMPLETED (Lesson 4) Get the userId of the logged in User
         String userId = user.getUserId();
 
-        // TODO (Lesson 4) Get the key for the User's Profile
+        // COMPLETED (Lesson 4) Get the key for the User's Profile
         Key<Profile> profileKey = Key.create(Profile.class, userId);
 
-        // TODO (Lesson 4) Allocate a key for the conference -- let App Engine allocate the ID
-        // TODO Don't forget to include the parent Profile in the allocated ID
+        // COMPLETED (Lesson 4) Allocate a key for the conference -- let App Engine allocate the ID
+        // Don't forget to include the parent Profile in the allocated ID
         final Key<Conference> conferenceKey = OfyService.ofy().factory().allocateId(profileKey, Conference.class);
 
-        // TODO (Lesson 4) Get the Conference Id from the Key
+        // COMPLETED (Lesson 4) Get the Conference Id from the Key
         final long conferenceId = conferenceKey.getId();
 
-        // TODO (Lesson 4) Get the existing Profile entity for the current user if there is one
-        // TODO Otherwise create a new Profile entity with default values
+        // COMPLETED (Lesson 4) Get the existing Profile entity for the current user if there is one
+        // Otherwise create a new Profile entity with default values
         Profile profile = getProfileFromUser(user);
 
-        // TODO (Lesson 4) Create a new Conference Entity,
-        // TODO specifying the user's Profile entity as the parent of the conference
+        // COMPLETED (Lesson 4) Create a new Conference Entity,
+        // specifying the user's Profile entity as the parent of the conference
         Conference conference = new Conference(conferenceId, userId, conferenceForm);
 
-        // TODO (Lesson 4) Save Conference and Profile Entities
+        // COMPLETED (Lesson 4) Save Conference and Profile Entities
         ofy().save().entities(profile, conference).now();
 
         return conference;
