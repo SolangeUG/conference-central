@@ -76,6 +76,33 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+
+            <!--
+                As this stackoverflow answer suggests [https://stackoverflow.com/a/9825309/5214592]:
+                sometimes, a unit test may pass in the IDE, but not with Maven, due to an interference from other unit tests.
+
+                When you run into this situation, and to make sure that this is what you're experiencing, try running
+                the test in isolation. IE: create a Maven running configuration with the following command line:
+                    test -Dtest=<ClassNameTest>
+                where ClassNameTest denotes the unit test that doesn't pass with Maven.
+                If the test passes, then you're sure the failure was due to interference from other tests.
+
+                In that case, add the following configuration to your maven-surefire-plugin, and it'll do the trick!
+                    <configuration>
+                        <reuseForks>false</reuseForks>
+                        <forkCount>1</forkCount>
+                    </configuration>
+             -->
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20.1</version>
+                <configuration>
+                    <reuseForks>false</reuseForks>
+                    <forkCount>1</forkCount>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
