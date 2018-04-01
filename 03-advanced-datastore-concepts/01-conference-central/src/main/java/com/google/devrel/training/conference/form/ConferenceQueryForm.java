@@ -182,7 +182,7 @@ public class ConferenceQueryForm {
             query = query.order(inequalityFilter.field.getFieldName());
             query = query.order("name");
         }
-        
+
         for (Filter filter : this.filters) {
             // Applies filters in order.
             if (filter.field.fieldType == FieldType.STRING) {
