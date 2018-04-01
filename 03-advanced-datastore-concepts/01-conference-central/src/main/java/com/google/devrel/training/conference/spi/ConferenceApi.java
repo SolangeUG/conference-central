@@ -119,6 +119,25 @@ public class ConferenceApi {
     }
 
     /**
+     * Gets the Profile entity for the current user or creates it if it doesn't exist
+     * @param user the current user
+     * @return user's Profile
+     */
+    private static Profile getProfileFromUser(User user) {
+        // First fetch the user's Profile from the datastore.
+        Profile profile = ofy().load().key(
+                Key.create(Profile.class, user.getUserId())).now();
+        if (profile == null) {
+            // Create a new Profile if it doesn't exist.
+            // Use default displayName and teeShirtSize
+            String email = user.getEmail();
+            profile = new Profile(user.getUserId(),
+                    extractDefaultDisplayNameFromEmail(email), email, TeeShirtSize.NOT_SPECIFIED);
+        }
+        return profile;
+    }
+
+    /**
      * Creates a new Conference object and stores it to the datastore.
      *
      * @param user A user who invokes this method, null when the user is not signed in.
@@ -149,17 +168,14 @@ public class ConferenceApi {
 
         // TODO (Lesson 4) Get the existing Profile entity for the current user if there is one
         // TODO Otherwise create a new Profile entity with default values
-        Profile profile = getProfile(user);
-        if (profile == null) {
-            profile = new Profile(userId, user.getNickname(), user.getEmail(), TeeShirtSize.NOT_SPECIFIED);
-        }
+        Profile profile = getProfileFromUser(user);
 
         // TODO (Lesson 4) Create a new Conference Entity,
         // TODO specifying the user's Profile entity as the parent of the conference
         Conference conference = new Conference(conferenceId, userId, conferenceForm);
 
         // TODO (Lesson 4) Save Conference and Profile Entities
-        ofy().save().entities(profile, conference);
+        ofy().save().entities(profile, conference).now();
 
         return conference;
     }
