@@ -192,7 +192,31 @@ public class ConferenceApi {
      */
     @ApiMethod(name = "queryConferences", path = "queryConferences", httpMethod = HttpMethod.POST)
     public List<Conference> queryConferences() {
+        // find all entities of type/kind Conference
         Query<Conference> query = ofy().load().type(Conference.class).order("name");
+        return query.list();
+    }
+
+    /**
+     * Ancestor query: restrict results to conferences that descend from the parent entity.
+     * We're using a POST method here again, in order to receive a conferenceQueryForm object via the POST method
+     *
+     * @param user the ancestor entity - the user who created the conferences
+     * @return a list of conferences created by the logged in user
+     */
+    @ApiMethod(name = "getConferencesCreated", path = "getConferencesCreated", httpMethod = HttpMethod.POST)
+    public List<Conference> getConferencesCreated(final User user)
+                            throws UnauthorizedException {
+
+        if (user == null) {
+            // only allow logged in users
+            throw new UnauthorizedException("Authorization required");
+        }
+
+        String userId = user.getUserId();
+        Key<Profile> profileKey = Key.create(Profile.class, userId);
+        Query<Conference> query = ofy().load().type(Conference.class).ancestor(profileKey);
+
         return query.list();
     }
 }
