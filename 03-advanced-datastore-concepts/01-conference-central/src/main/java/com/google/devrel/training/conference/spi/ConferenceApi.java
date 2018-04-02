@@ -15,6 +15,9 @@ import com.google.devrel.training.conference.form.ProfileForm;
 import com.google.devrel.training.conference.form.ProfileForm.TeeShirtSize;
 import com.google.devrel.training.conference.service.OfyService;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.cmd.Query;
+
+import java.util.List;
 
 /**
  * This class defines the first steps of the conference app APIs.
@@ -178,5 +181,18 @@ public class ConferenceApi {
         ofy().save().entities(profile, conference).now();
 
         return conference;
+    }
+
+    /**
+     * Queries against the datastore with the given filters and returns the result.
+     * Normally, this kind of method is supposed to get invoked by a GET HTTP method,
+     * but we do it with POST, in order to receive a conferenceQueryForm object via the POST method
+     *
+     * @return a list of conferences that match the query.
+     */
+    @ApiMethod(name = "queryConferences", path = "queryConferences", httpMethod = HttpMethod.POST)
+    public List<Conference> queryConferences() {
+        Query<Conference> query = ofy().load().type(Conference.class).order("name");
+        return query.list();
     }
 }
