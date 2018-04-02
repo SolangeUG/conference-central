@@ -224,7 +224,7 @@ public class ConferenceApi {
      * A method to try out different filters for queries.
      * @return a filtered list of conferences
      */
-    @ApiMethod(name = "filterPlayground", path = "filterPlayground", httpMethod = HttpMethod.POST)
+    //@ApiMethod(name = "filterPlayground", path = "filterPlayground", httpMethod = HttpMethod.GET)
     public List<Conference> filterPlayground() {
 
         // Making sure the results are sorted by name
@@ -233,6 +233,7 @@ public class ConferenceApi {
         // Filter on city
         query = query.filter("city =", "London");
 
+        /* Activate each filter one at a time!
         // Add a filter for topic = "Medical Innovations"
         query = query.filter("topics =", "Medical Innovations");
 
@@ -253,7 +254,7 @@ public class ConferenceApi {
                             .order("seatsAvailable")
                             .order("name")
                             .order("month");
-
+        */
         return query.list();
     }
 }
