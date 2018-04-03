@@ -67,8 +67,11 @@ public class Conference {
 
     /**
      * The name of the city that the conference takes place.
+     * Only index this property only if it takes a value other
+     * than the default value.
      */
-    @Index(IfNotDefault.class) private String city;
+    @Index(IfNotDefault.class)
+    private String city;
 
     /**
      * The starting date of this conference.
