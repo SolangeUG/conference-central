@@ -11,6 +11,7 @@ import com.google.devrel.training.conference.Constants;
 import com.google.devrel.training.conference.domain.Conference;
 import com.google.devrel.training.conference.domain.Profile;
 import com.google.devrel.training.conference.form.ConferenceForm;
+import com.google.devrel.training.conference.form.ConferenceQueryForm;
 import com.google.devrel.training.conference.form.ProfileForm;
 import com.google.devrel.training.conference.form.ProfileForm.TeeShirtSize;
 import com.google.devrel.training.conference.service.OfyService;
@@ -188,12 +189,16 @@ public class ConferenceApi {
      * Normally, this kind of method is supposed to get invoked by a GET HTTP method,
      * but we do it with POST, in order to receive a conferenceQueryForm object via the POST method
      *
+     * @param queryForm the actual query form, where users specify the query criteria
      * @return a list of conferences that match the query.
      */
     @ApiMethod(name = "queryConferences", path = "queryConferences", httpMethod = HttpMethod.POST)
-    public List<Conference> queryConferences() {
+    public List<Conference> queryConferences(ConferenceQueryForm queryForm) {
         // find all entities of type/kind Conference
-        Query<Conference> query = ofy().load().type(Conference.class).order("name");
+        // Query<Conference> query = ofy().load().type(Conference.class).order("name");
+        
+        // return all entities matching the user criteria in the query form
+        Query<Conference> query = queryForm.getQuery();
         return query.list();
     }
 
