@@ -228,24 +228,34 @@ public class ConferenceApi {
     public List<Conference> filterPlayground() {
 
         // Making sure the results are sorted by name
-        Query<Conference> query = ofy().load().type(Conference.class).order("name");
+        Query<Conference> query = ofy().load().type(Conference.class);
 
         // Filter on city
         query = query.filter("city =", "London");
 
-        /* Activate each filter one at a time!
         // Add a filter for topic = "Medical Innovations"
         query = query.filter("topics =", "Medical Innovations");
+
+        // Add a filter for month {unindexed composite query}
+        // Find conferences in June
+        query = query.filter("month =", 6);
+
+        // Add a filter for maxAttendees
+
+        // Note : the first sort property must be the same as the property to which the inequality filter is applied.
+        // So, if in the query the first sort property is the name but the inequality filter is on maxAttendees
+        // we'll get an error! Therefore, we remove the order by name on the first line, and sort on maxAttendees first.
+        query = query.filter("maxAttendees >", 10)
+                        .order("maxAttendees")
+                        .order("name");
+
+        /* Activate each filter one at a time!
 
         // Add a filter for maxAttendees
         query = query.filter("maxAttendees >", 8);
         query = query.filter("maxAttendees <", 10)
                         .order("maxAttendees")
                         .order("name");
-
-        // Add a filter for month {unindexed composite query}
-        // Find conferences in June
-        query = query.filter("month =", 6);
 
         // multiple sort orders
         query = query.filter("city =", "Tokyo")
