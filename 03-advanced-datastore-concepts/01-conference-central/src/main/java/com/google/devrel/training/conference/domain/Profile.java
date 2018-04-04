@@ -1,8 +1,12 @@
 package com.google.devrel.training.conference.domain;
 
+import com.google.common.collect.ImmutableList;
 import com.google.devrel.training.conference.form.ProfileForm.TeeShirtSize;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a Profile entity.
@@ -15,6 +19,9 @@ public class Profile {
     private String displayName;
     private String mainEmail;
     private TeeShirtSize teeShirtSize;
+
+    // List of conferences the user has registered to attend
+    private List<String> conferenceKeysToAttend = new ArrayList<>(0);
 
     // COMPLETED indicate that the userId is to be used in the Entity's key
     @Id
@@ -64,6 +71,14 @@ public class Profile {
      */
     public String getUserId() {
         return userId;
+    }
+
+    /**
+     * Return a copy of all the conferences to attend
+     * @return immutable list of conference keys (to attend)
+     */
+    public List<String> getConferenceKeysToAttend() {
+        return ImmutableList.copyOf(conferenceKeysToAttend);
     }
 
     /**
