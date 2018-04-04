@@ -25,6 +25,8 @@ import com.googlecode.objectify.cmd.Query;
 
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -449,5 +451,39 @@ public class ConferenceApi {
         public String getReason() {
             return reason;
         }
+    }
+
+    /**
+     * Returns a collection of Conference Object that the user is going to attend.
+     * @param user An user who invokes this method, null when the user is not signed in.
+     * @return a Collection of Conferences that the user is going to attend.
+     * @throws UnauthorizedException when the User object is null.
+     */
+    @ApiMethod(name = "getConferencesToAttend", path = "getConferencesToAttend", httpMethod = HttpMethod.GET)
+    public Collection<Conference> getConferencesToAttend(final User user)
+                                    throws UnauthorizedException, NotFoundException {
+        // If not signed in, throw a 401 error.
+        if (user == null) {
+            throw new UnauthorizedException("Authorization required");
+        }
+
+        // COMPLETED: Get the Profile entity for the user
+        Profile profile = getProfileFromUser(user);
+        if (profile == null) {
+            throw new NotFoundException("Profile doesn't exist.");
+        }
+
+        // COMPLETED: Get the value of the profile's conferenceKeysToAttend property
+        List<String> keyStringsToAttend = profile.getConferenceKeysToAttend();
+
+        // COMPLETED: Iterate over keyStringsToAttend, and return a Collection of the
+        // Conference entities that the user has registered to atend
+        List<Conference> conferences = new LinkedList<>();
+        for (String key: keyStringsToAttend) {
+            Conference conference = getConference(key);
+            conferences.add(conference);
+        }
+
+        return conferences;
     }
 }
