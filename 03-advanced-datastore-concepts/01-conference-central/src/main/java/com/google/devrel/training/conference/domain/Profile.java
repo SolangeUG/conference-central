@@ -20,7 +20,14 @@ public class Profile {
     private String mainEmail;
     private TeeShirtSize teeShirtSize;
 
-    // List of conferences the user has registered to attend
+    /*
+    * List of conferences the user has registered to attend
+    *
+    * The reason String is used for the keys is because you can't pass around
+    * Key<E> entities around inside JSON. So, we create a web safe version of the key
+    * as a String, and work with that.
+    *
+    */
     private List<String> conferenceKeysToAttend = new ArrayList<>(0);
 
     // COMPLETED indicate that the userId is to be used in the Entity's key
