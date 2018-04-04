@@ -5,6 +5,9 @@ import static com.google.devrel.training.conference.service.OfyService.ofy;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
+import com.google.api.server.spi.response.ConflictException;
+import com.google.api.server.spi.response.ForbiddenException;
+import com.google.api.server.spi.response.NotFoundException;
 import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.users.User;
 import com.google.devrel.training.conference.Constants;
@@ -16,8 +19,11 @@ import com.google.devrel.training.conference.form.ProfileForm;
 import com.google.devrel.training.conference.form.ProfileForm.TeeShirtSize;
 import com.google.devrel.training.conference.service.OfyService;
 import com.googlecode.objectify.Key;
+
+import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
 
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -293,5 +299,121 @@ public class ConferenceApi {
                             .order("month");
         */
         return query.list();
+    }
+
+    /**
+     * A method to allow users to register for conferences
+     * @param user the user registering for the conference
+     * @param websafeConferenceKey the conference key to register for
+     * @return a value/flag that indicates whether the operation was successful or not
+     * @throws UnauthorizedException in case the user is unidentified
+     * @throws NotFoundException in case the specified conference key is not found
+     * @throws ForbiddenException in case of any other unexpected error
+     * @throws ConflictException in case there are no seats available for the specified conference
+     */
+    public WrappedBoolean registerForConference(final User user,
+                                                @Named("websafeConferenceKey") final String websafeConferenceKey)
+            throws UnauthorizedException, NotFoundException,
+                    ForbiddenException, ConflictException {
+
+        // If not signed in, throw a 401 error.
+        if (user == null) {
+            throw new UnauthorizedException("Authorization required");
+        }
+
+        // Get the userId
+        final String userId = user.getUserId();
+
+        WrappedBoolean result = ofy().transact(new Work<WrappedBoolean>() {
+            @Override
+            public WrappedBoolean run() {
+                try {
+
+                    // Get the conference key
+                    Key<Conference> conferenceKey = Key.create(websafeConferenceKey);
+
+                    // Get the Conference entity from the datastore
+                    Conference conference = ofy().load().key(conferenceKey).now();
+
+                    // 404 when there is no Conference with the given conferenceId.
+                    if (conference == null) {
+                        return new WrappedBoolean (false,
+                                "No Conference found with key: "
+                                        + websafeConferenceKey);
+                    }
+
+                    // Get the user's Profile entity
+                    Profile profile = getProfileFromUser(user);
+
+                    // Has the user already registered to attend this conference?
+                    if (profile.getConferenceKeysToAttend().contains(
+                            websafeConferenceKey)) {
+                        return new WrappedBoolean (false, "Already registered");
+                    } else if (conference.getSeatsAvailable() <= 0) {
+                        return new WrappedBoolean (false, "No seats available");
+                    } else {
+                        // All looks good, go ahead and book the seat
+                        profile.addToConferenceKeysToAttend(websafeConferenceKey);
+                        conference.bookSeats(1);
+
+                        // Save the Conference and Profile entities
+                        ofy().save().entities(profile, conference).now();
+                        // We are booked!
+                        return new WrappedBoolean(true);
+                    }
+
+                }
+                catch (Exception e) {
+                    return new WrappedBoolean(false, "Unknown exception");
+
+                }
+            }
+        });
+
+        // if result is false
+        if (!result.getResult()) {
+
+            String reason = result.getReason();
+
+            if ("Already registered".equals(reason)) {
+                throw new ConflictException("You have already registered");
+            } else if ("No seats available".equals(reason)) {
+                throw new ConflictException("There are no seats available");
+            } else if (reason.contains("No Conference found with key")) {
+                throw new NotFoundException("No Conference found with key: " + websafeConferenceKey);
+            } else {
+                throw new ForbiddenException("Unknown exception");
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Utility class for wrapping boolean values.
+     * This is because endpoint functions must return objects,
+     * they can't return simple data type objects such as String, Long or Boolean.
+     */
+    public static class WrappedBoolean {
+
+        private final Boolean result;
+        private final String reason;
+
+        WrappedBoolean(Boolean result) {
+            this.result = result;
+            this.reason = "";
+        }
+
+        WrappedBoolean(Boolean result, String reason) {
+            this.result = result;
+            this.reason = reason;
+        }
+
+        Boolean getResult() {
+            return result;
+        }
+
+        String getReason() {
+            return reason;
+        }
     }
 }
