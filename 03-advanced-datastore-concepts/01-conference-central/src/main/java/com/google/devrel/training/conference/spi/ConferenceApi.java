@@ -302,6 +302,23 @@ public class ConferenceApi {
     }
 
     /**
+     * Returns a Conference object with the given conference key.
+     * @param websafeConferenceKey The String representation of the Conference Key.
+     * @return a Conference object with the given conferenceId.
+     * @throws NotFoundException when there is no Conference with the given conferenceId.
+     */
+    @ApiMethod(name = "getConference", path = "conference/{websafeConferenceKey}", httpMethod = HttpMethod.GET)
+    public Conference getConference(@Named("websafeConferenceKey") final String websafeConferenceKey)
+                        throws NotFoundException {
+        Key<Conference> conferenceKey = Key.create(websafeConferenceKey);
+        Conference conference = ofy().load().key(conferenceKey).now();
+        if (conference == null) {
+            throw new NotFoundException("No Conference found with key: " + websafeConferenceKey);
+        }
+        return conference;
+    }
+
+    /**
      * A method to allow users to register for conferences
      * @param user the user registering for the conference
      * @param websafeConferenceKey the conference key to register for
