@@ -18,6 +18,7 @@ import com.google.devrel.training.conference.service.OfyService;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -198,8 +199,29 @@ public class ConferenceApi {
         // Query<Conference> query = ofy().load().type(Conference.class).order("name");
 
         // return all entities matching the user criteria in the query form
-        Query<Conference> query = queryForm.getQuery();
-        return query.list();
+        // Query<Conference> query = queryForm.getQuery();
+
+        /*
+        * When the Web UI displays conferences, it shows the conference organizer's display name.
+        * However, for each conference, the organizer's display name is calculated on the fly when needed,
+        * in case the organizer changes their display name.
+        * So to decrease the hits to the datastore, we can preload all the Profile entities for the users
+        * who have organized conferences.
+        */
+
+        Iterable<Conference> conferenceIterable = queryForm.getQuery();
+        List<Conference> result = new ArrayList<>(0);
+        List<Key<Profile>> organizersKeyList = new ArrayList<>(0);
+
+        for (Conference conference: conferenceIterable) {
+            Key<Profile> key = Key.create(Profile.class, conference.getOrganizerUserId());
+            organizersKeyList.add(key);
+            result.add(conference);
+        }
+
+        // To avoid separate datastore gets for each Conference, pre-fetch the profiles
+        ofy().load().keys(organizersKeyList);
+        return result;
     }
 
     /**
