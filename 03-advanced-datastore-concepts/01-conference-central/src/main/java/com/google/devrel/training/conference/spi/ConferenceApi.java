@@ -432,21 +432,21 @@ public class ConferenceApi {
         private final Boolean result;
         private final String reason;
 
-        WrappedBoolean(Boolean result) {
+        public WrappedBoolean(Boolean result) {
             this.result = result;
             this.reason = "";
         }
 
-        WrappedBoolean(Boolean result, String reason) {
+        public WrappedBoolean(Boolean result, String reason) {
             this.result = result;
             this.reason = reason;
         }
 
-        Boolean getResult() {
+        public Boolean getResult() {
             return result;
         }
 
-        String getReason() {
+        public String getReason() {
             return reason;
         }
     }
