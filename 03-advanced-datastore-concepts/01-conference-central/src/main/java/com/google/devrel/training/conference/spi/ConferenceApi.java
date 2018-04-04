@@ -196,7 +196,7 @@ public class ConferenceApi {
     public List<Conference> queryConferences(ConferenceQueryForm queryForm) {
         // find all entities of type/kind Conference
         // Query<Conference> query = ofy().load().type(Conference.class).order("name");
-        
+
         // return all entities matching the user criteria in the query form
         Query<Conference> query = queryForm.getQuery();
         return query.list();

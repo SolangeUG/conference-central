@@ -126,7 +126,8 @@ public class ConferenceQueryForm {
         for (Filter filter : this.filters) {
             if (filter.operator.isInequalityFilter()) {
                 // Only one inequality filter is allowed.
-                if (inequalityFilter != null && ! inequalityFilter.field.equals(filter.field)) {
+                if (inequalityFilter != null &&
+                        ! inequalityFilter.field.equals(filter.field)) {
                     throw new IllegalArgumentException(
                             "Inequality filter is allowed on only one field.");
                 }
@@ -137,7 +138,6 @@ public class ConferenceQueryForm {
 
     /**
      * Getter for filters.
-     *
      * @return The List of filters.
      */
     public List<Filter> getFilters() {
@@ -146,14 +146,14 @@ public class ConferenceQueryForm {
 
     /**
      * Adds a query filter.
-     *
      * @param filter A Filter object for the query.
      * @return this for method chaining.
      */
     public ConferenceQueryForm filter(Filter filter) {
         if (filter.operator.isInequalityFilter()) {
             // Only allows inequality filters on a single field.
-            if (inequalityFilter != null && ! inequalityFilter.field.equals(filter.field)) {
+            if (inequalityFilter != null &&
+                    ! inequalityFilter.field.equals(filter.field)) {
                 throw new IllegalArgumentException(
                         "Inequality filter is allowed on only one field.");
             }
@@ -165,7 +165,6 @@ public class ConferenceQueryForm {
 
     /**
      * Returns an Objectify Query object for the specified filters.
-     *
      * @return an Objectify Query.
      */
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
