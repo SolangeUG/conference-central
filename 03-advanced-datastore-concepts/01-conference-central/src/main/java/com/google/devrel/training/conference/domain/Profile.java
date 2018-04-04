@@ -96,6 +96,14 @@ public class Profile {
     }
 
     /**
+     * Add a conference key to the list of conference keys to attend
+     * @param conferenceKey the new conference key
+     */
+    public void addToConferenceKeysToAttend(String conferenceKey) {
+        conferenceKeysToAttend.add(conferenceKey);
+    }
+
+    /**
      * A private default constructor.
      */
     private Profile() {}
