@@ -341,7 +341,24 @@ public class ConferenceApi {
         // Get the userId
         final String userId = user.getUserId();
 
+        /*
+        * Start a transaction with Objectify
+        * Google App Engine transactions use snapshot isolation and optimistic concurrency.
+        * If multiple transactions update an entity, the first transaction to commit succeeds, the others fail.
+        *
+        * Differences between Objectify and native Datastore Transactions:
+        *   In the native Datastore API, any changes to an entity inside a transaction are not reflected to any
+        *   queries or gets made later in the transaction.
+        *
+        *   However, queries and gets inside transactions in Objectify will reflect any changes to entities made
+        *   previously in the transaction (be aware though that those changes will be lost if the transaction does not
+        *   commit successfully).
+        *
+        * Best practice:
+        *   limit the use of transactions as much as possible to entity updates rather than for queries and gets.
+        */
         WrappedBoolean result = ofy().transact(new Work<WrappedBoolean>() {
+
             @Override
             public WrappedBoolean run() {
                 try {
@@ -388,7 +405,7 @@ public class ConferenceApi {
         });
 
         // if result is false
-        if (!result.getResult()) {
+        if (! result.getResult()) {
 
             String reason = result.getReason();
 
