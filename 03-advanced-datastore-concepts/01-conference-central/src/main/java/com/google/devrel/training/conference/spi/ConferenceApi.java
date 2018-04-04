@@ -486,4 +486,23 @@ public class ConferenceApi {
 
         return conferences;
     }
+
+    /**
+     * Unregister from the specified Conference.
+     * @param user An user who invokes this method, null when the user is not signed in.
+     * @param websafeConferenceKey The String representation of the Conference Key
+     * to unregister from.
+     * @return Boolean true when success, otherwise false.
+     * @throws UnauthorizedException when the user is not signed in.
+     * @throws NotFoundException when there is no Conference with the given conferenceId.
+     */
+    @ApiMethod(name = "unregisterFromConference", path = "conference/{websafeConferenceKey}/registration",
+               httpMethod = HttpMethod.DELETE)
+    public WrappedBoolean unregisterFromConference(final User user,
+                                                   @Named("websafeConferenceKey") final String websafeConferenceKey)
+            throws UnauthorizedException, NotFoundException, ForbiddenException, ConflictException {
+
+        // TODO: Implement this!
+        return new WrappedBoolean(false, "Not Implemented Yet!");
+    }
 }
