@@ -104,6 +104,18 @@ public class Profile {
     }
 
     /**
+     * Remove the conference key from conference keys to attend.
+     * @param conferenceKey a websafe String representation of the Conference Key.
+     */
+    public void unregisterFromConference(String conferenceKey) {
+        if (conferenceKeysToAttend.contains(conferenceKey)) {
+            conferenceKeysToAttend.remove(conferenceKey);
+        } else {
+            throw new IllegalArgumentException("Invalid conferenceKey: " + conferenceKey);
+        }
+    }
+
+    /**
      * A private default constructor.
      */
     private Profile() {}
