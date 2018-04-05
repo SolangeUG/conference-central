@@ -2,6 +2,7 @@ package com.google.devrel.training.conference.domain;
 
 import com.google.common.collect.ImmutableList;
 import com.google.devrel.training.conference.form.ProfileForm.TeeShirtSize;
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
@@ -13,8 +14,22 @@ import java.util.List;
  * @author Solange U. Gasengayire
  */
 @Entity
+@Cache
 public class Profile {
     // COMPLETED indicate that this class is an Entity
+
+    /*
+    * With the @Cache annotation, Objectify will be using Memcache
+    * to cache property values whenever possible.
+    *
+    * NOTICE:
+    *   - Objectify only uses Memcache when you get the entity by key,
+    *     and when you save or delete it.
+    *   - Query results are not cached.
+    *   - Objectify puts property values into cache, not the entire entity itself.
+    *   - Finally, Objectify has its own session cache... which reduces the use of Memcache,
+    *     let alone the Datastore.
+    */
 
     private String displayName;
     private String mainEmail;
