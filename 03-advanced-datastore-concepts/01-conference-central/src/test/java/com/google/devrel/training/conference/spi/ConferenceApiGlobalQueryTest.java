@@ -95,7 +95,6 @@ public class ConferenceApiGlobalQueryTest {
         helper.tearDown();
     }
 
-    /*
     @Test
     public void testEmptyQuery() throws Exception {
         // Empty query.
@@ -262,5 +261,4 @@ public class ConferenceApiGlobalQueryTest {
                         "6"
                 ));
     }
-    */
 }
