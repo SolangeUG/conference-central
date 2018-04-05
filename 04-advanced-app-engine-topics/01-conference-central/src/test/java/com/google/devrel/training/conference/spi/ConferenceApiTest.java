@@ -7,8 +7,10 @@ import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.users.User;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+// import com.google.devrel.training.conference.domain.Conference;
 import com.google.devrel.training.conference.domain.Conference;
 import com.google.devrel.training.conference.domain.Profile;
+// import com.google.devrel.training.conference.form.ConferenceForm;
 import com.google.devrel.training.conference.form.ConferenceForm;
 import com.google.devrel.training.conference.form.ProfileForm;
 import com.google.devrel.training.conference.form.ProfileForm.TeeShirtSize;
@@ -30,25 +32,16 @@ import java.util.List;
 public class ConferenceApiTest {
 
     private static final String EMAIL = "example@gmail.com";
-
     private static final String USER_ID = "123456789";
-
     private static final TeeShirtSize TEE_SHIRT_SIZE = TeeShirtSize.NOT_SPECIFIED;
-
     private static final String DISPLAY_NAME = "Your Name Here";
-
     private static final String NAME = "GCP Live";
-
     private static final String DESCRIPTION = "New announcements for Google Cloud Platform";
-
     private static final String CITY = "San Francisco";
-
     private static final int MONTH = 3;
-
     private static final int CAP = 500;
 
     private User user;
-
     private ConferenceApi conferenceApi;
 
     private final LocalServiceTestHelper helper =
@@ -168,7 +161,6 @@ public class ConferenceApiTest {
         assertEquals(DISPLAY_NAME, profile.getDisplayName());
     }
 
-
     @Test
     public void testCreateConference() throws Exception {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -219,8 +211,6 @@ public class ConferenceApiTest {
         assertTrue("The result should contain a conference",
                 conferencesCreated.contains(conference));
     }
-
-
 
     @Test
     public void testGetConference() throws Exception {
@@ -281,6 +271,5 @@ public class ConferenceApiTest {
         assertEquals(CAP, conference.getSeatsAvailable());
         assertFalse("Profile shouldn't have the conferenceId in conferenceIdsToAttend.",
                 profile.getConferenceKeysToAttend().contains(conference.getWebsafeKey()));
-
-}
+    }
 }

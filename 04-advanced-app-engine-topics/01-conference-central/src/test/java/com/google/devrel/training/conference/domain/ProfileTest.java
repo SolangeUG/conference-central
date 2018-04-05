@@ -63,7 +63,6 @@ public class ProfileTest {
         assertEquals(newTeeShirtSize, profile.getTeeShirtSize());
     }
 
-    /*
     @Test
     public void testListValues() throws Exception {
         List<String> conferenceKeys = new ArrayList<>();
@@ -73,5 +72,4 @@ public class ProfileTest {
         conferenceKeys.add(conferenceKey.getString());
         assertEquals(conferenceKeys, profile.getConferenceKeysToAttend());
     }
-    */
 }
