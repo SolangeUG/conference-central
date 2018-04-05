@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <!-- Conference API Servlet -->
     <servlet>
         <servlet-name>SystemServiceServlet</servlet-name>
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
@@ -12,9 +17,23 @@
         <servlet-name>SystemServiceServlet</servlet-name>
         <url-pattern>/_ah/spi/*</url-pattern>
     </servlet-mapping>
+
+    <!-- Announcement Servlet -->
+    <servlet>
+        <servlet-name>SetAnnouncementServlet</servlet-name>
+        <servlet-class>com.google.devrel.training.conference.servlet.SetAnnouncementServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetAnnouncementServlet</servlet-name>
+        <url-pattern>/crons/set_announcement</url-pattern>
+    </servlet-mapping>
+
+    <!-- Homepage -->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
+    <!-- Default Security Configuration -->
      <security-constraint>
         <web-resource-collection>
             <web-resource-name>all</web-resource-name>
@@ -24,4 +43,20 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
+
+    <!-- Announcement Security Configuration -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>crons</web-resource-name>
+            <url-pattern>/crons/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <!--
+                users with the admin role are the only
+                ones who can access the URLs under /crons/
+            -->
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
 </web-app>
