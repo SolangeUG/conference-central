@@ -398,10 +398,8 @@ public class ConferenceApi {
                         return new WrappedBoolean(true);
                     }
 
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     return new WrappedBoolean(false, "Unknown exception");
-
                 }
             }
         });
@@ -502,7 +500,72 @@ public class ConferenceApi {
                                                    @Named("websafeConferenceKey") final String websafeConferenceKey)
             throws UnauthorizedException, NotFoundException, ForbiddenException, ConflictException {
 
-        // TODO: Implement this!
-        return new WrappedBoolean(false, "Not Implemented Yet!");
+        // Error 401 if the user is not signed in
+        if (user == null) {
+            throw new UnauthorizedException("Authorization required.");
+        }
+
+        // Get the user ID
+        final String userId = user.getUserId();
+
+        // Start a transaction with Objectify to unregister from conference
+        WrappedBoolean result = ofy().transact(new Work<WrappedBoolean>() {
+
+            @Override
+            public WrappedBoolean run() {
+
+                try {
+
+                    // Get the conference key
+                    Key<Conference> conferenceKey = Key.create(websafeConferenceKey);
+
+                    // Get the Conference entity from the datastore
+                    Conference conference = ofy().load().key(conferenceKey).now();
+
+                    // When there is no Conference with the given conference key
+                    if (conference == null) {
+                        return new WrappedBoolean (
+                                false,
+                                "No Conference found with key: " + websafeConferenceKey);
+                    }
+
+                    // Get the user's Profile entity
+                    Profile profile = getProfileFromUser(user);
+
+                    // Has the user registered to attend this conference?
+                    if (! profile.getConferenceKeysToAttend().contains(websafeConferenceKey)) {
+                        return new WrappedBoolean (
+                                false,
+                                "Not registered for this conference");
+                    } else {
+                        // All looks good, go ahead and unregister
+                        profile.unregisterFromConference(websafeConferenceKey);
+                        conference.giveBackSeats(1);
+
+                        // Save the Conference and Profile entities
+                        ofy().save().entities(profile, conference).now();
+                        // We have successfully unregistered!
+                        return new WrappedBoolean(true);
+                    }
+
+                } catch (Exception exception) {
+                    return new WrappedBoolean(false, exception.getMessage());
+                }
+            }
+        });
+
+        // in case the operation failed
+        if (! result.getResult()) {
+            String reason = result.getReason();
+            if ("Not registered for this conference".equals(reason)) {
+                throw new ConflictException(reason);
+            } else if (reason.contains("No Conference found with key")) {
+                throw new NotFoundException("No Conference found with key: " + websafeConferenceKey);
+            } else {
+                throw new ForbiddenException(reason);
+            }
+        }
+        // success
+        return result;
     }
 }
