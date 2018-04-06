@@ -1,0 +1,15 @@
+<!-- Task Queue Configuration File -->
+<queue-entries>
+    <queue>
+        <name>default</name>
+        <rate>20/s</rate>
+    </queue>
+    <queue>
+        <name>email-queue</name>
+        <rate>30/s</rate>
+    </queue>
+    <queue>
+        <name>registration-queue</name>
+        <rate>40/s</rate>
+    </queue>
+</queue-entries>
