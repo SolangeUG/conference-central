@@ -9,8 +9,11 @@ import com.google.api.server.spi.response.ConflictException;
 import com.google.api.server.spi.response.ForbiddenException;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.api.server.spi.response.UnauthorizedException;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.devrel.training.conference.Constants;
+import com.google.devrel.training.conference.domain.Announcement;
 import com.google.devrel.training.conference.domain.Conference;
 import com.google.devrel.training.conference.domain.Profile;
 import com.google.devrel.training.conference.form.ConferenceForm;
@@ -567,5 +570,24 @@ public class ConferenceApi {
         }
         // success
         return result;
+    }
+
+    /**
+     * A method to retrieve the latest announcement out of memcache.
+     * @return an announcement if available
+     */
+    @ApiMethod(name = "getAnnouncement", path = "announcement", httpMethod = HttpMethod.GET)
+    public Announcement getAnnouncement() {
+        MemcacheService service = MemcacheServiceFactory.getMemcacheService();
+        String announcementKey = Constants.MEMCACHE_ANNOUNCEMENTS_KEY;
+        Object message = service.get(announcementKey);
+
+        // an annoucement has been found
+        if (message != null) {
+            return new Announcement(message.toString());
+        }
+
+        // there's no announcement
+        return null;
     }
 }
