@@ -72,25 +72,16 @@ First, before an Android app can be authorized to access our API, we'll need to 
 mobile app. To do so, follow these steps:
 
 - in a terminal window, run the follow command to generate a **key** and sign the mobile application
-
-````script
-keytool -genkey -v -keystore keystore-name.keystore -alias keystore-alias -keyalg RSA -keysize 2048 -validity 1000
-````  
-
+    - `keytool -genkey -v -keystore keystore-name.keystore -alias keystore-alias -keyalg RSA -keysize 2048 -validity 1000` 
 - enter a **password** for your key (and make sure to remember it)
 - answer the various questions that follow (such as your first name, and your last name...)
-- say **yes** to the last question.
-
-**NB:** it is OK for the password for the _keystore alias_ to be the same as the _keystore_ password.
+- say **yes** to the last question
+- then enter a password for the keystore alias. It is OK for the password for the _keystore alias_ to be the same as the _keystore_ password.
 
 Getting the **SHA-1 fingerprint** for the mobile app:
 
 - in terminal window, run the following command:
-
-````script
-keytool -exportcert -alias keystore-alias -keystore keystore-name.keystore -list -v
-````
-
+    - `keytool -exportcert -alias keystore-alias -keystore keystore-name.keystore -list -v`
 - enter the password you chose in the previous steps
 - copy and save the generated **SHA-1** value, for example: `04:E7:79:66:CD...C7:41`
 
