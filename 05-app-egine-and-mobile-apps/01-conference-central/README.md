@@ -122,6 +122,9 @@ For Andoid apps:
 
 **NB: if you make any change to your backend API, you will need to update the client library.**
 
+Once you've generated the client library, read through the Google Cloud documentation 
+on [Calling Backend APIs from an Android Client][9].
+
 ## Changes to the Conference Central Code
 
 In general, when you create an application that uses **Endpoints**, the code to define the endpoints is the same regardless 
@@ -143,3 +146,4 @@ lack of the `userId` in Android Users.
 [6]: https://console.developers.google.com/
 [7]: https://localhost:8080/
 [8]: https://console.developers.google.com/apis/
+[9]: https://cloud.google.com/endpoints/docs/frameworks/python/consume_android
