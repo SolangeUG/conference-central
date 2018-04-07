@@ -48,13 +48,13 @@ public class ConferenceForm {
 
     /**
      * Public constructor is solely for Unit Test.
-     * @param name
-     * @param description
-     * @param topics
-     * @param city
-     * @param startDate
-     * @param endDate
-     * @param maxAttendees
+     * @param name conference name
+     * @param description conference description
+     * @param topics conference topics
+     * @param city conference city
+     * @param startDate conference start date
+     * @param endDate conference end date
+     * @param maxAttendees maximum number of attendees
      */
     public ConferenceForm(String name, String description, List<String> topics, String city,
                           Date startDate, Date endDate, int maxAttendees) {
@@ -67,30 +67,58 @@ public class ConferenceForm {
         this.maxAttendees = maxAttendees;
     }
 
+    /**
+     * Return the name on the conference form
+     * @return conference name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Return the description on the conference form
+     * @return conference description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Return the topics on the conference form
+     * @return conference topics
+     */
     public List<String> getTopics() {
         return topics;
     }
 
+    /**
+     * Return the city on the conference form
+     * @return conference city
+     */
     public String getCity() {
         return city;
     }
 
+    /**
+     * Return the start date on the conference form
+     * @return conference start date
+     */
     public Date getStartDate() {
         return startDate;
     }
 
+    /**
+     * Return the end date on the conference form
+     * @return conference end date
+     */
     public Date getEndDate() {
         return endDate;
     }
 
+    /**
+     * Return the maximum number of attendees
+     * @return conference capacity
+     */
     public int getMaxAttendees() {
         return maxAttendees;
     }
