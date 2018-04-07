@@ -11,6 +11,9 @@ import com.google.api.server.spi.response.NotFoundException;
 import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.users.User;
 import com.google.devrel.training.conference.Constants;
 import com.google.devrel.training.conference.domain.Announcement;
@@ -170,7 +173,7 @@ public class ConferenceApi {
         }
 
         // COMPLETED (Lesson 4) Get the userId of the logged in User
-        String userId = user.getUserId();
+        final String userId = user.getUserId();
 
         // COMPLETED (Lesson 4) Get the key for the User's Profile
         Key<Profile> profileKey = Key.create(Profile.class, userId);
@@ -182,16 +185,31 @@ public class ConferenceApi {
         // COMPLETED (Lesson 4) Get the Conference Id from the Key
         final long conferenceId = conferenceKey.getId();
 
-        // COMPLETED (Lesson 4) Get the existing Profile entity for the current user if there is one
-        // Otherwise create a new Profile entity with default values
-        Profile profile = getProfileFromUser(user);
+        // From the default task queue, let's add a task to send confirmation email
+        final Queue queue = QueueFactory.getDefaultQueue();
 
-        // COMPLETED (Lesson 4) Create a new Conference Entity,
-        // specifying the user's Profile entity as the parent of the conference
-        Conference conference = new Conference(conferenceId, userId, conferenceForm);
+        // Start a transaction
+        Conference conference = ofy().transact(new Work<Conference>() {
+            @Override
+            public Conference run() {
+                // COMPLETED (Lesson 4) Get the existing Profile entity for the current user if there is one
+                // Otherwise create a new Profile entity with default values
+                Profile profile = getProfileFromUser(user);
+                // COMPLETED (Lesson 4) Create a new Conference Entity,
+                // specifying the user's Profile entity as the parent of the conference
+                Conference conference = new Conference(conferenceId, userId, conferenceForm);
+                // COMPLETED (Lesson 4) Save Conference and Profile Entities
+                ofy().save().entities(conference, profile).now();
 
-        // COMPLETED (Lesson 4) Save Conference and Profile Entities
-        ofy().save().entities(profile, conference).now();
+                // Add "send confirmation email" task
+                queue.add(ofy().getTransaction(),
+                        TaskOptions.Builder.withUrl("/tasks/send_confirmation_email")
+                            .param("email", profile.getMainEmail())
+                            .param("conferenceInfo", conference.toString()));
+                // Return the created conference
+                return conference;
+            }
+        });
 
         return conference;
     }
