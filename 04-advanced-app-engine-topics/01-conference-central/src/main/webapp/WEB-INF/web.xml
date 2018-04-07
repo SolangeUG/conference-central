@@ -28,6 +28,16 @@
         <url-pattern>/crons/set_announcement</url-pattern>
     </servlet-mapping>
 
+    <!-- Confirmation Email Servlet -->
+    <servlet>
+        <servlet-name>SendConfirmationEmailServlet</servlet-name>
+        <servlet-class>com.google.devrel.training.conference.servlet.SendConfirmationEmailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SendConfirmationEmailServlet</servlet-name>
+        <url-pattern>/tasks/send_confirmation_email</url-pattern>
+    </servlet-mapping>
+
     <!-- Homepage -->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
@@ -54,6 +64,21 @@
             <!--
                 users with the admin role are the only
                 ones who can access the URLs under /crons/
+            -->
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- Email Confirmation Security Configuration -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>tasks</web-resource-name>
+            <url-pattern>/tasks/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <!--
+                users with the admin role are the only
+                ones who can access the URLs under /tasks/
             -->
             <role-name>admin</role-name>
         </auth-constraint>
