@@ -117,7 +117,7 @@ For Andoid apps:
 - in a terminal window, navigate to the root folder of our Google App Engine application (where `pom.xml` is located)
 - run the command `mvn appengine:endpoints_get_client_lib`
 - then, navigate to the `target/endpoints-client-libs/conference` folder, and run the command `mvn install`
-- navigate back to the `target` folder where the client library jar file will be located
+- navigate the `target` folder (inside the `conference` folder) where the client library jar file will be located
 - copy the generated client library (`conference-v1-1.0.0.jar` for example) to the project folder of your mobile application.
 
 **NB: if you make any change to your backend API, you will need to update the client library.**
