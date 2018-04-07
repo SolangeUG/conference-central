@@ -1,8 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <cronentries>
+  <!-- Disable our cron job to avoid unnecessarily burning out our AppEngine quotass
   <cron>
-    <url>/crons/set_announcement</url>
-    <description>Repopulate the announcement every 1 hour</description>
-    <schedule>every 1 hours</schedule>
-  </cron>  
+      <url>/crons/set_announcement</url>
+      <description>Announce conferences that are nearly sold out</description>
+      <schedule>every 1 minutes</schedule>
+  </cron>
+  -->
 </cronentries>
