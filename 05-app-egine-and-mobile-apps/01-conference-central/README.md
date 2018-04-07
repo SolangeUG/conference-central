@@ -86,11 +86,9 @@ Getting the **SHA-1 fingerprint** for the mobile app:
 - copy and save the generated **SHA-1** value, for example: `04:E7:79:66:CD...C7:41`
 
 
-Then, on the [Google APIs][8] page, select your project, then under the **Credentials** tab, click the **Create credentials** 
+On the [Google APIs][8] page, select your project, then under the **Credentials** tab, click the **Create credentials** 
 drop-down button, the choose, the `OAuth client ID` option. You'll be prompted to choose an application type, select 
-**Android**.
-
-Then: 
+**Android**. Then, follow these instructions: 
 - enter a **name** for your Android Client ID
 - enter the **SHA-1** fingerprint of your mobile application
 - from your `AndroidManifest.xml` file, get the package name of your mobile app
