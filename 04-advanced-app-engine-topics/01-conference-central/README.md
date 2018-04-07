@@ -1,6 +1,6 @@
 # Google App Engine Application
 
-Advanced [Google Cloud Datastore][1] concepts.
+Advanced [Google App Engine topics][1].
 
 ## Products - Language - APIs
 
@@ -64,7 +64,7 @@ oauth2Provider.signIn = function (callback) {
 ````
 
 
-[1]: https://cloud.google.com/appengine/docs/standard/java/datastore/
+[1]: https://cloud.google.com/appengine/docs/standard/python/memcache/
 [2]: https://developers.google.com/appengine
 [3]: http://java.com/en/
 [4]: https://developers.google.com/appengine/docs/java/endpoints/
