@@ -1,6 +1,6 @@
 # Google App Engine Application
 
-Advanced [Google Cloud Datastore][1] concepts.
+[Google App Engine and mobile apps][1].
 
 ## Products - Language - APIs
 
@@ -112,7 +112,7 @@ For Andoid apps:
 **NB: should you make any changes to your backend API, you will need to update the client library.**
 
 Once you've generated the client library, read through the Google Cloud documentation 
-on [Calling Backend APIs from an Android Client][9].
+on [Calling Backend APIs from an Android Client][1].
 
 ## Changes to the Conference Central Code
 
@@ -127,7 +127,7 @@ lack of the `userId` in Android Users.
 
 
 
-[1]: https://cloud.google.com/appengine/docs/standard/java/datastore/
+[1]: https://cloud.google.com/endpoints/docs/frameworks/java/calling-from-android
 [2]: https://developers.google.com/appengine
 [3]: http://java.com/en/
 [4]: https://developers.google.com/appengine/docs/java/endpoints/
@@ -135,4 +135,3 @@ lack of the `userId` in Android Users.
 [6]: https://console.developers.google.com/
 [7]: https://localhost:8080/
 [8]: https://console.developers.google.com/apis/
-[9]: https://cloud.google.com/endpoints/docs/frameworks/python/consume_android
