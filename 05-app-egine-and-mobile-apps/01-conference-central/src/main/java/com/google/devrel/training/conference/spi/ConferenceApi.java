@@ -41,10 +41,12 @@ import java.util.List;
  */
 @Api(name = "conference",
         version = "v1",
-        scopes = {Constants.EMAIL_SCOPE },
+        scopes = {Constants.EMAIL_SCOPE},
         clientIds = {
                 Constants.WEB_CLIENT_ID,
-                Constants.API_EXPLORER_CLIENT_ID },
+                Constants.API_EXPLORER_CLIENT_ID,
+                Constants.ANDROID_CLIENT_ID},
+        audiences = {Constants.ANDROID_AUDIENCE},
         description = "API for the Conference Central Backend application.")
 public class ConferenceApi {
 
