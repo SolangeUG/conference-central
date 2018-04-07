@@ -24,47 +24,27 @@ import java.util.List;
 public class ConferenceApiGlobalQueryTest {
 
     private static final String USER_ID = "123456789";
-
     private static final String NAME1 = "GCP Live";
-
     private static final String NAME2 = "Google I/O";
-
     private static final String NAME3 = "GCP Roadshow";
-
     private static final String DESCRIPTION1 = "New announcements for Google Cloud Platform";
-
     private static final String DESCRIPTION2 = "Google's annual developer event.";
-
     private static final String DESCRIPTION3 = "World tour for Google Cloud Platform";
-
     private static final String CITY1 = "Mountain View";
-
     private static final String CITY2 = "San Francisco";
-
     private static final String CITY3 = "Tokyo";
-
     private static final List<String> TOPICS1 = ImmutableList.of("Cloud", "Platform");
-
     private static final List<String> TOPICS2 = ImmutableList.of("Developer", "Platform");
-
     private static final List<String> TOPICS3 = ImmutableList.of("Cloud", "Platform", "Japan");
-
     private static final int CAP1 = 500;
-
     private static final int CAP2 = 1000;
-
     private static final int CAP3 = 1500;
 
     private Date startDate1;
-
     private Date startDate2;
-
     private Date startDate3;
-
     private Date endDate1;
-
     private Date endDate2;
-
     private Date endDate3;
 
     private ConferenceApi conferenceApi;
