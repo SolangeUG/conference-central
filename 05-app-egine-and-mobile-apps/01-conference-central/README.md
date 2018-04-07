@@ -63,6 +63,77 @@ oauth2Provider.signIn = function (callback) {
 
 ````
 
+## Authorizing Mobile clients
+
+As stated above, for a mobile app to be able to access our backend API, it needs to be authorized first.
+Here's how to create an OAuth 2.0 Android Client ID.
+
+First, before an Android app can be authorized to access our API, we'll need to create a **SHA-1 fingerprint** of that 
+mobile app. To do so, follow these steps:
+
+- in a terminal window, run the follow command to generate a **key** and sign the mobile application
+
+````script
+keytool -genkey -v -keystore keystore-name.keystore -alias keystore-alias -keyalg RSA -keysize 2048 -validity 1000
+````  
+
+- enter a **password** for your key (and make sure to remember it)
+- answer the various questions that follow (such as your first name, and your last name...)
+- say **yes** to the last question.
+
+**NB:** it is OK for the password for the _keystore alias_ to be the same as the _keystore_ password.
+
+Getting the **SHA-1 fingerprint** for the mobile app:
+
+- in terminal window, run the following command:
+
+````script
+keytool -exportcert -alias keystore-alias -keystore keystore-name.keystore -list -v
+````
+
+- enter the password you chose in the previous steps
+- copy and save the generated **SHA-1** value, for example: `04:E7:79:66:CD...C7:41`
+
+
+Then, on the [Google APIs][8] page, select your project, then under the **Credentials** tab, click the **Create credentials** 
+drop-down button, the choose, the `OAuth client ID` option. You'll be prompted to choose an application type, select 
+**Android**.
+
+Then: 
+- enter a **name** for your Android Client ID
+- enter the **SHA-1** fingerprint of your mobile application
+- from your `AndroidManifest.xml` file, get the package name of your mobile app
+- to finish, click the `Create` button.
+
+Once the `Client ID` is generated, we can add it to the list of authorized client IDS in the `@Api` annotation of our 
+Java backend endpoints class.
+
+## Generating The Client Libraries
+
+The next step is to generate the client library that contains our endpoints API, to include it in our mobile app.
+
+For Andoid apps:
+
+- in a terminal window, navigate to the root folder of our Google App Engine application (where `pom.xml` is located)
+- run the command `mvn appengine:endpoints_get_client_lib`
+- then, navigate to the `target/endpoints-client-libs/conference` folder, and run the command `mvn install`
+- navigate back to the `target` folder where the client library jar file will be located
+- copy the generated client library (`conference-v1-1.0.0.jar` for example) to the project folder of your mobile application.
+
+**NB: if you make any change to your backend API, you will need to update the client library.**
+
+## Changes to the Conference Central Code
+
+In general, when you create an application that uses **Endpoints**, the code to define the endpoints is the same regardless 
+of whether the endpoints are used by a Web app or an Android app. 
+However, when the Android app injects the user into an endpoints API call, the `User` object does not include the `userId`. 
+
+In our backend application, we have used the `userId` to uniquely identify the logged-in user, and obviously this 
+won't work for Android users. 
+Therefore, in our Conference Central application, we have to define a class `AppEngineUser` that compensates for the 
+lack of the `userId` in Android Users.
+
+
 
 [1]: https://cloud.google.com/appengine/docs/standard/java/datastore/
 [2]: https://developers.google.com/appengine
