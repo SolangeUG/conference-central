@@ -358,6 +358,11 @@ public class ConferenceApi {
      * @throws ForbiddenException in case of any other unexpected error
      * @throws ConflictException in case there are no seats available for the specified conference
      */
+    @ApiMethod(
+            name = "registerForConference",
+            path = "conference/{websafeConferenceKey}/registration",
+            httpMethod = HttpMethod.POST
+    )
     public WrappedBoolean registerForConference(final User user,
                                                 @Named("websafeConferenceKey") final String websafeConferenceKey)
             throws UnauthorizedException, NotFoundException,
