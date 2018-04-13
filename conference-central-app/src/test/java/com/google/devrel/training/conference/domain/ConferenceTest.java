@@ -22,25 +22,16 @@ import java.util.List;
 public class ConferenceTest {
 
     private static final long ID = 123456L;
-
     private static final String NAME = "GCP Live";
-
     private static final String DESCRIPTION = "New announcements for Google Cloud Platform";
-
     private static final String ORGANIZER_USER_ID = "123456789";
-
     private static final String CITY = "San Francisco";
-
     private static final int MONTH = 3;
-
     private static final int CAP = 500;
 
     private Date startDate;
-
     private Date endDate;
-
     private List<String> topics;
-
     private ConferenceForm conferenceForm;
 
     private final LocalServiceTestHelper helper =
@@ -57,8 +48,7 @@ public class ConferenceTest {
         topics.add("Google");
         topics.add("Cloud");
         topics.add("Platform");
-        conferenceForm = new ConferenceForm(NAME, DESCRIPTION, topics, CITY, startDate, endDate,
-                CAP);
+        conferenceForm = new ConferenceForm(NAME, DESCRIPTION, topics, CITY, startDate, endDate, CAP);
     }
 
     @After
@@ -94,7 +84,7 @@ public class ConferenceTest {
 
     @Test
     public void testGetOrganizerDisplayName() throws Exception {
-        String displayName = "Takashi Matsuo";
+        String displayName = "Udacity Student";
         Profile profile = new Profile(ORGANIZER_USER_ID, displayName, "", null);
         ofy().save().entity(profile).now();
         Conference conference = new Conference(ID, ORGANIZER_USER_ID, conferenceForm);
