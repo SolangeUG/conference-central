@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- Task Queue Configuration File -->
+<queue-entries>
+    <queue>
+        <name>default</name>
+        <!-- how often tasks are processed on this queue -->
+        <rate>4/s</rate>
+        <retry-parameters>
+            <!-- the maximum number of attempts for a task -->
+            <task-retry-limit>4</task-retry-limit>
+            <!-- the time limit for retrying a failed task, measured from when the task was first run -->
+            <task-age-limit>2d</task-age-limit>
+            <!-- the minimum number of seconds to wait before retrying a task after it fails -->
+            <min-backoff-seconds>10</min-backoff-seconds>
+        </retry-parameters>
+    </queue>
+
+    <!-- Other named queue examples
+    <queue>
+        <name>email-queue</name>
+        <rate>30/s</rate>
+    </queue>
+    <queue>
+        <name>registration-queue</name>
+        <rate>40/s</rate>
+    </queue>
+    -->
+</queue-entries>
