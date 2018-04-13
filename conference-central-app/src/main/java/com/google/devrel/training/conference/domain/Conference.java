@@ -2,16 +2,15 @@ package com.google.devrel.training.conference.domain;
 
 import static com.google.devrel.training.conference.service.OfyService.ofy;
 
+import com.googlecode.objectify.annotation.*;
+import com.googlecode.objectify.condition.IfNotDefault;
+
 import com.google.api.server.spi.config.AnnotationBoolean;
 import com.google.api.server.spi.config.ApiResourceProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.devrel.training.conference.form.ConferenceForm;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Parent;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +20,7 @@ import java.util.List;
  * Conference class stores conference information.
  */
 @Entity
+@Cache
 public class Conference {
 
     private static final String DEFAULT_CITY = "Default City";
@@ -29,11 +29,10 @@ public class Conference {
 
     /**
      * The id for the datastore key.
-     *
      * We use automatic id assignment for entities of Conference class.
      */
     @Id
-    private Long id;
+    private long id;
 
     /**
      * The name of the conference.
@@ -54,7 +53,7 @@ public class Conference {
     private Key<Profile> profileKey;
 
     /**
-     * The gplus_id of the organizer.
+     * The userId of the organizer.
      */
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
     private String organizerUserId;
@@ -67,8 +66,10 @@ public class Conference {
 
     /**
      * The name of the city that the conference takes place.
+     * Only index this property only if it takes a value other
+     * than the default value.
      */
-    @Index
+    @Index(IfNotDefault.class)
     private String city;
 
     /**
@@ -83,7 +84,6 @@ public class Conference {
 
     /**
      * Indicating the starting month derived from startDate.
-     *
      * We need this for a composite query specifying the starting month.
      */
     @Index
@@ -106,6 +106,12 @@ public class Conference {
      */
     private Conference() {}
 
+    /**
+     * Conference constructor with arguments
+     * @param id the conference identifier
+     * @param organizerUserId the organizer's identifier
+     * @param conferenceForm the conference form
+     */
     public Conference(final long id, final String organizerUserId,
                       final ConferenceForm conferenceForm) {
         Preconditions.checkNotNull(conferenceForm.getName(), "The name is required");
@@ -115,27 +121,51 @@ public class Conference {
         updateWithConferenceForm(conferenceForm);
     }
 
+    /**
+     * Return this conference id
+     * @return the id
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * Return this conference name
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Return this conference description
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Return the profile key associated with this conference
+     * @return the profile key
+     */
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
     public Key<Profile> getProfileKey() {
         return profileKey;
     }
 
+    /**
+     * Return a string version of the key
+     * @return string representation of the key
+     */
     public String getWebsafeKey() {
         return Key.create(profileKey, Conference.class, id).getString();
     }
 
+    /**
+     * Return the organizer's id
+     * @return organizer's id
+     */
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
     public String getOrganizerUserId() {
         return organizerUserId;
@@ -143,11 +173,12 @@ public class Conference {
 
     /**
      * Returns organizer's display name.
-     *
-     * @return organizer's display name. If there is no Profile, return his/her gplusId.
+     * @return organizer's display name.
+     *         If there is no Profile, return his/her userId.
      */
     public String getOrganizerDisplayName() {
-        Profile organizer = ofy().load().key(Key.create(Profile.class, organizerUserId)).now();
+        // Profile organizer = ofy().load().key(Key.create(Profile.class, organizerUserId)).now();
+        Profile organizer = ofy().load().key(getProfileKey()).now();
         if (organizer == null) {
             return organizerUserId;
         } else {
@@ -163,6 +194,10 @@ public class Conference {
         return topics == null ? null : ImmutableList.copyOf(topics);
     }
 
+    /**
+     * Return where this conference will be held
+     * @return the city
+     */
     public String getCity() {
         return city;
     }
@@ -183,14 +218,26 @@ public class Conference {
         return endDate == null ? null : new Date(endDate.getTime());
     }
 
+    /**
+     * Return the month in which this conference will be held
+     * @return the month
+     */
     public int getMonth() {
         return month;
     }
 
+    /**
+     * Return the maximum number of attendees
+     * @return maximum number of attendees
+     */
     public int getMaxAttendees() {
         return maxAttendees;
     }
 
+    /**
+     * Return the current number of seats available
+     * @return number of seats available
+     */
     public int getSeatsAvailable() {
         return seatsAvailable;
     }
@@ -198,7 +245,6 @@ public class Conference {
     /**
      * Updates the Conference with ConferenceForm.
      * This method is used upon object creation as well as updating existing Conferences.
-     *
      * @param conferenceForm contains form data sent from the client.
      */
     public void updateWithConferenceForm(ConferenceForm conferenceForm) {
@@ -217,7 +263,7 @@ public class Conference {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(this.startDate);
             // Calendar.MONTH is zero based, so adding 1.
-            this.month = calendar.get(calendar.MONTH) + 1;
+            this.month = calendar.get(Calendar.MONTH) + 1;
         }
         // Check maxAttendees value against the number of already allocated seats.
         int seatsAllocated = maxAttendees - seatsAvailable;
@@ -231,6 +277,10 @@ public class Conference {
         this.seatsAvailable = this.maxAttendees - seatsAllocated;
     }
 
+    /**
+     * Book seats for this conference
+     * @param number number of seats to book
+     */
     public void bookSeats(final int number) {
         if (seatsAvailable < number) {
             throw new IllegalArgumentException("There are no seats available.");
@@ -238,33 +288,67 @@ public class Conference {
         seatsAvailable = seatsAvailable - number;
     }
 
+    /**
+     * Unbook seats for this conference
+     * @param number number of seats to unbook
+     */
     public void giveBackSeats(final int number) {
         if (seatsAvailable + number > maxAttendees) {
-            throw new IllegalArgumentException("The number of seats will exceeds the capacity.");
+            throw new IllegalArgumentException("The number of seats will exceed the capacity.");
         }
         seatsAvailable = seatsAvailable + number;
     }
 
+    /**
+     * Return a string representation of this conference
+     * @return this conference as a string
+     */
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("Id: " + id + "\n")
-                .append("Name: ").append(name).append("\n");
+        StringBuilder stringBuilder =
+                new StringBuilder("Id: " + id + "\n")
+                        .append("Name: ")
+                        .append(name)
+                        .append("\n");
+
         if (city != null) {
-            stringBuilder.append("City: ").append(city).append("\n");
+            stringBuilder
+                    .append("City: ")
+                    .append(city)
+                    .append("\n");
         }
+
         if (topics != null && topics.size() > 0) {
-            stringBuilder.append("Topics:\n");
+            stringBuilder
+                    .append("Topics:\n");
             for (String topic : topics) {
-                stringBuilder.append("\t").append(topic).append("\n");
+                stringBuilder
+                        .append("\t")
+                        .append(topic)
+                        .append("\n");
             }
         }
+
         if (startDate != null) {
-            stringBuilder.append("StartDate: ").append(startDate.toString()).append("\n");
+            stringBuilder
+                    .append("StartDate: ")
+                    .append(startDate.toString())
+                    .append("\n");
         }
+
         if (endDate != null) {
-            stringBuilder.append("EndDate: ").append(endDate.toString()).append("\n");
+            stringBuilder
+                    .append("EndDate: ")
+                    .append(endDate.toString())
+                    .append("\n");
         }
-        stringBuilder.append("Max Attendees: ").append(maxAttendees).append("\n");
+
+        stringBuilder
+                .append("Max Attendees: ")
+                .append(maxAttendees)
+                .append("\n");
+
         return stringBuilder.toString();
     }
+
 }

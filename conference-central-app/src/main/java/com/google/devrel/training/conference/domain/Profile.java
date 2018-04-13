@@ -2,6 +2,7 @@ package com.google.devrel.training.conference.domain;
 
 import com.google.common.collect.ImmutableList;
 import com.google.devrel.training.conference.form.ProfileForm.TeeShirtSize;
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
@@ -9,50 +10,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Profile class stores user's profile data.
+ * This class represents a Profile entity.
+ * @author Solange U. Gasengayire
  */
 @Entity
+@Cache
 public class Profile {
-    /**
-     *  Use userId as the datastore key.
+    // COMPLETED indicate that this class is an Entity
+
+    /*
+     * With the @Cache annotation, Objectify will be using Memcache
+     * to cache property values whenever possible.
+     *
+     * NOTICE:
+     *   - Objectify only uses Memcache when you get the entity by key,
+     *     and when you save or delete it.
+     *   - Query results are not cached.
+     *   - Objectify puts property values into cache, not the entire entity itself.
+     *   - Finally, Objectify has its own session cache... which reduces the use of Memcache,
+     *     let alone the Datastore.
      */
+
+    private String displayName;
+    private String mainEmail;
+    private TeeShirtSize teeShirtSize;
+
+    /*
+     * List of conferences the user has registered to attend
+     *
+     * The reason String is used for the keys is because you can't pass around
+     * Key<E> entities around inside JSON. So, we create a web safe version of the key
+     * as a String, and work with that.
+     *
+     */
+    private List<String> conferenceKeysToAttend = new ArrayList<>(0);
+
+    // COMPLETED indicate that the userId is to be used in the Entity's key
     @Id
     private String userId;
 
     /**
-     * Any string user wants us to display him/her on this system.
-     */
-    private String displayName;
-
-    /**
-     * User's main e-mail address.
-     */
-    private String mainEmail;
-
-    /**
-     * The user's tee shirt size.
-     * Options are defined as an Enum in ProfileForm
-     */
-    private TeeShirtSize teeShirtSize;
-
-    /**
-     * Keys of the conferences that this user registers to attend.
-     */
-    private List<String> conferenceKeysToAttend = new ArrayList<>(0);
-
-    /**
-     * Just making the default constructor private.
-     */
-    private Profile() {}
-
-    /**
      * Public constructor for Profile.
-     * @param userId The datastore key.
+     * @param userId The user id, obtained from the email
      * @param displayName Any string user wants us to display him/her on this system.
      * @param mainEmail User's main e-mail address.
-     * @param teeShirtSize User's teeShirtSize (Enum is in ProfileForm)
+     * @param teeShirtSize The User's tee shirt size
      */
-    public Profile(String userId, String displayName, String mainEmail, TeeShirtSize teeShirtSize) {
+    public Profile (String userId, String displayName, String mainEmail, TeeShirtSize teeShirtSize) {
         this.userId = userId;
         this.displayName = displayName;
         this.mainEmail = mainEmail;
@@ -60,49 +64,49 @@ public class Profile {
     }
 
     /**
-     * Getter for userId.
-     * @return userId.
-     */
-    public String getUserId() {
-        return userId;
-    }
-
-    /**
-     * Getter for displayName.
-     * @return displayName.
+     * Return the display name associated with this profile
+     * @return display name
      */
     public String getDisplayName() {
         return displayName;
     }
 
     /**
-     * Getter for mainEmail.
-     * @return mainEmail.
+     * Return the main email address associated with this profile
+     * @return the main email address
      */
     public String getMainEmail() {
         return mainEmail;
     }
 
     /**
-     * Getter for teeShirtSize.
-     * @return teeShirtSize.
+     * Return the tee-shirt size associated with this profile
+     * @return the shirt size
      */
     public TeeShirtSize getTeeShirtSize() {
         return teeShirtSize;
     }
 
     /**
-     * Getter for conferenceIdsToAttend.
-     * @return an immutable copy of conferenceIdsToAttend.
+     * Return the user ID associated with this profile
+     * @return the userID
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * Return a copy of all the conferences to attend
+     * @return immutable list of conference keys (to attend)
      */
     public List<String> getConferenceKeysToAttend() {
         return ImmutableList.copyOf(conferenceKeysToAttend);
     }
 
     /**
-     * Update the Profile with the given displayName and teeShirtSize
-     * @param displayName
-     * @param teeShirtSize
+     * Update this profile's properties
+     * @param displayName the new display name value
+     * @param teeShirtSize the new tee shirt size value
      */
     public void update(String displayName, TeeShirtSize teeShirtSize) {
         if (displayName != null) {
@@ -114,20 +118,15 @@ public class Profile {
     }
 
     /**
-     * Adds a ConferenceId to conferenceIdsToAttend.
-     *
-     * The method initConferenceIdsToAttend is not thread-safe, but we need a transaction for
-     * calling this method after all, so it is not a practical issue.
-     *
-     * @param conferenceKey a websafe String representation of the Conference Key.
+     * Add a conference key to the list of conference keys to attend
+     * @param conferenceKey the new conference key
      */
     public void addToConferenceKeysToAttend(String conferenceKey) {
         conferenceKeysToAttend.add(conferenceKey);
     }
 
     /**
-     * Remove the conferenceId from conferenceIdsToAttend.
-     *
+     * Remove the conference key from conference keys to attend.
      * @param conferenceKey a websafe String representation of the Conference Key.
      */
     public void unregisterFromConference(String conferenceKey) {
@@ -137,4 +136,10 @@ public class Profile {
             throw new IllegalArgumentException("Invalid conferenceKey: " + conferenceKey);
         }
     }
+
+    /**
+     * A private default constructor.
+     */
+    private Profile() {}
+
 }
