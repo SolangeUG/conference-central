@@ -1,7 +1,7 @@
 package com.google.devrel.training.conference.form;
 
 /**
- * Pojo representing a profile form on the client side.
+ * A POJO representing a profile form on the client side.
  */
 public class ProfileForm {
     /**
@@ -10,32 +10,43 @@ public class ProfileForm {
     private String displayName;
 
     /**
-     * User's tee shirt size
+     * T shirt size.
      */
     private TeeShirtSize teeShirtSize;
 
+    /**
+     * No-argument constructor
+     */
     private ProfileForm () {}
 
     /**
      * Constructor for ProfileForm, solely for unit test.
      * @param displayName A String for displaying the user on this system.
-     * @param teeShirtSize User's tee shirt size
+     * @param teeShirtSize the T shirt size
      */
     public ProfileForm(String displayName, TeeShirtSize teeShirtSize) {
         this.displayName = displayName;
         this.teeShirtSize = teeShirtSize;
     }
 
+    /**
+     * Return the display name
+     * @return display name
+     */
     public String getDisplayName() {
         return displayName;
     }
 
+    /**
+     * Return the T shirt size
+     * @return T shirt size
+     */
     public TeeShirtSize getTeeShirtSize() {
         return teeShirtSize;
     }
 
     /**
-     * Enum representing T shirt size.
+     * All known T shirt sizes
      */
     public static enum TeeShirtSize {
         NOT_SPECIFIED,
