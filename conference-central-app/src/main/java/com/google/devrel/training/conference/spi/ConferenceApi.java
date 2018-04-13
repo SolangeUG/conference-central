@@ -1,8 +1,5 @@
 package com.google.devrel.training.conference.spi;
 
-import static com.google.devrel.training.conference.service.OfyService.factory;
-import static com.google.devrel.training.conference.service.OfyService.ofy;
-
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
@@ -30,12 +27,13 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.Work;
 
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.inject.Named;
+import static com.google.devrel.training.conference.service.OfyService.ofy;
 
 /**
  * This class defines the first steps of the conference app APIs.
