@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <cronentries>
-  <!-- Disable our cron job to avoid unnecessarily burning out our AppEngine quotass
+  <!-- Disable our cron job to avoid unnecessarily burning out our AppEngine quotas
   <cron>
       <url>/crons/set_announcement</url>
       <description>Announce conferences that are nearly sold out</description>
