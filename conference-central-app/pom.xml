@@ -11,7 +11,7 @@
 
     <properties>
         <appengine.app.version>1</appengine.app.version>
-        <appengine.target.version>1.9.4</appengine.target.version>
+        <appengine.target.version>1.9.21</appengine.target.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -106,6 +106,17 @@
 	                <configuration>
 	                    <enableJarClasses>false</enableJarClasses>
 	                </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <!--
+                                    This execution goal is critical!
+                                    Without it, the build fails!
+                                -->
+                                <goal>endpoints_get_discovery_doc</goal>
+                            </goals>
+                        </execution>
+                    </executions>
 	            </plugin>
 	        </plugins>
     </build>
