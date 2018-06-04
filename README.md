@@ -12,9 +12,9 @@ To use Google App Engine, it's necessary to learn how it works, and this project
 
 ## Languages - Libraries - Tools
 
-- [Java SE 7+][7]
-- [Maven 3.3+][8]
-- Any IDE that supports JDK 7+
+- [Java SE 8][7]
+- [Maven 3.5.3][8]
+- Any IDE that supports JDK 8
 - [Google App Engine Maven plugin][9]
 
 ## Resources
@@ -28,9 +28,9 @@ To use Google App Engine, it's necessary to learn how it works, and this project
 [4]: https://eu.udacity.com/course/developing-scalable-apps-in-java--ud859
 [5]: https://cloud.google.com/appengine/
 [6]: https://cloud.google.com/endpoints/
-[7]: http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html
+[7]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [8]: https://maven.apache.org/download.cgi
-[9]: https://developers.google.com/appengine/docs/java/tools/maven
+[9]: https://cloud.google.com/appengine/docs/standard/java/tools/using-maven
 [10]: https://cloud.google.com/appengine/articles/scalability
 [11]: https://cloud.google.com/tools/intellij/docs/quickstart-IDEA#install
 [12]: https://cloud.google.com/eclipse/docs/quickstart#installing_cloud_tools_for_eclipse
