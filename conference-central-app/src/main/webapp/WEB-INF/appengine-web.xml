@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+
+    <!-- application ID and version are not necessary when using the Google Cloud SDK
     <application>sug-apt-octagon</application>
     <version>1</version>
+    -->
+
+    <!-- Migrating to Endpoints Framework v2 -->
+    <runtime>java8</runtime>
     <threadsafe>true</threadsafe>
 
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
     </system-properties>
+
+    <!-- Migrating to Stackdriver Trace: this configuration is no longer needed
     <admin-console>
 	  <page name="Appstats" url="/appstats" />
 	</admin-console>
+	-->
 </appengine-web-app>
